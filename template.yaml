@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template for Team Responsibility Manager
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: team-responsibility-manager
+    Description: TRM keeps track of shared responsibilities and notifies teams when a responsibility rotates from one person to the next.
+    Author: nicholsonjf
+    SpdxLicenseId: Apache-2.0
+    LicenseUrl: LICENSE.txt
+    ReadmeUrl: README.md
+    Labels: ['slack']
+    HomePageUrl: https://github.com/user1/my-app-project
+    SemanticVersion: 0.0.1
+    SourceCodeUrl: https://github.com/user1/my-app-project
+
+Globals:
+  Function:
+    Timeout: 3
+
+Parameters:
+  ShouldCreateBucketInputParameter:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    ConstraintDescription: Allowed values are 'true' or 'false'.
+    Description: Whether to create the S3 bucket used by this application.
+  BucketNameParameter:
+    Type: String
+    Default: trmbucket
+    AllowedPattern: '^[a-z0-9]{3,63}$'
+    ConstraintDescription: Bucket name must be between 3-63 characters and contain only lowercase letters and numbers.
+    Description: The name of S3 bucket used by this application.
+
+Conditions:
+  CreateS3Condition: !Equals [!Ref ShouldCreateBucketInputParameter, 'true']
+
+Resources:
+  TRMBucket:
+    Condition: CreateS3Condition
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref BucketNameParameter
+  TRMFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Timeout: 15
+      MemorySize: 512
+      PackageType: Image
+      Architectures:
+        - x86_64
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref BucketNameParameter
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref BucketNameParameter
+      Events:
+        EventBridge:
+          Type: Schedule
+          Properties:
+            Schedule: 'cron(0/15 * * * ? *)'
+            Name: TRMEventSchedule
+            Description: Every 15 minutes
+            Enabled: true
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./trm
+      DockerTag: python3.9-v1  
+
+Outputs:
+  TRMFunction:
+    Description: "TRM Lambda Function ARN"
+    Value: !GetAtt TRMFunction.Arn
+  TRMFunctionIamRole:
+    Description: "Implicit IAM Role created for the TRM function"
+    Value: !GetAtt TRMFunctionRole.Arn
