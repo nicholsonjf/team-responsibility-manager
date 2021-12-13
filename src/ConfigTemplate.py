@@ -1,6 +1,6 @@
 body = """
 {
-    "enabled": "false",
+    "enabled": "true",
     "timezone": "America/New_York",
     "slack": {
         "channels": {
@@ -24,8 +24,8 @@ body = """
         }
     },
     "responsibilities": {
-        "garbage_collector": {
-            "name": "Garbage Collector",
+        "meeting_facilitator": {
+            "name": "Meeting Facilitator",
             "team": "my_team",
             "rotation": {
                 "frequency": "weekly",
