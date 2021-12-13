@@ -8,22 +8,22 @@ When you configure TRM you define a Responsibility, the Team that is responsible
 
 This is a basic description of how to deploy the application. There's more detail on the deployment process further down in the readme.
 
-**Step 1:**
+**Step 1:**  
 Login to the AWS console and switch to the "us-east-2" region.
 
-**Step 2:**
+**Step 2:**  
 Go to the app's page on the AWS Serverless Application Repository:
 https://serverlessrepo.aws.amazon.com/applications/us-east-2/825297539859/team-responsibility-manager
 
 Add a bucket name, and click "Deploy".
 
-**Step 3:**
+**Step 3:**  
 Setup your Slack app. See below for instructions.
 
-**Step 4:**
+**Step 4:**  
 Fill in your config.json file. See below for instructions.
 
-**Step 5:**
+**Step 5:**  
 That's it! Wait for your configured responsibilities to rotate and look out for notifications in Slack.
 
 ## Video Demos
@@ -38,26 +38,26 @@ Imagine a youth soccer team with 12 players. The parents and the coaches agreed 
 
 ## Deploy on Amazon Web Services
 
-**Step 1:**  
+**Step 1:**    
 Login to the AWS console and switch to the "us-east-2" region.  
 
 (*Currently us-east-2 is the only region that's supported for this application's deployment. This is because container repositories on AWS ECR are only available from within a region. There may be a way around this but I'm not aware of how yet*)
 
-**Step 2:**  
+**Step 2:**    
 In the servies search box type in "Serverless Application Repository" and click on the first result.
 
-**Step 3:**  
+**Step 3:**    
 Click on "Available Applications"
 
-**Step 4:**  
+**Step 4:**    
 Under "Public Applications" type in "Team Responsibility Manager" and click on the first result.
 
-**Step 5:**  
+**Step 5:**    
 Scroll down to "Application Settings" and enter a name for the S3 bucket that will be created during deployment. It needs to be globally unique, so choose a name with attributes specific to you. Example: "harvard-trm-bucket-54321"
 
 You can leave the other application settings as their defaults.
 
-**Step 6:**  
+**Step 6:**    
 Click "Deploy"
 
 ## Check The Deployment
@@ -86,13 +86,13 @@ To see the specific resources created go to CloudFormation and look at the stack
 ## Slack
 In order for TRM to send notifications to the Slack channel you specify in your config.json you'll need to create a Slack app and setup incoming webhooks. If you want to create a new channel for TRM to use, do that from your Slack app before completing the below steps.
 
-**Step 1:**
+**Step 1:**  
 Go to https://api.slack.com/apps and login to your Slack account. Once logged in, click the "Create New App" button.
 
-**Step 2:**
+**Step 2:**  
 In the dialog that pops up, click on "From an app manifest". Select the workspace you want to receive notifications in.
 
-**Step 3:**
+**Step 3:**  
 Paste in the below YAML as your app manifest.
 
 ```YAML
@@ -117,13 +117,13 @@ settings:
 
 This creates a very basic Slack app that simply allows you to create incoming webhooks so TRM can send messages to Slack channels in your workspace.
 
-**Step 4:**
+**Step 4:**  
 Once your app is created, click on its name under "Your Apps". This will take you to your app's configuration page. Once there, click on the "Incoming Webhooks" section in the left menu.
 
-**Step 5:**
+**Step 5:**  
 If the "Activate Incoming Webhooks" switch isn't already enabled, enable it. Then, scroll down to the bottom of the page and click "Add New Webhook to Workspace". You should see a dropdown menu with options for channels in your workspace. Select the channel you want TRM to send messages to and click "Allow".
 
-**Step 6:**
+**Step 6:**  
 You should be redirected back to the "Webhooks" page. Find the webhook you just created and copy the Webhook-URL. This is what you'll enter in the "webhook" property of a slack channel you setup in your config.json.
 
 See the below Slack documentation if you need more help.
