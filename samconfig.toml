@@ -1,13 +1,16 @@
 version = 0.1
 [default]
+
 [default.deploy.parameters]
 resolve_image_repos = true
 resolve_s3 = true
 stack_name = "trm-stack"
-s3_prefix = "trm-stack"
+s3_prefix = "trm"
 region = "us-east-2"
 confirm_changeset = false
 capabilities = "CAPABILITY_IAM"
 disable_rollback = false
-parameter_overrides = "ShouldCreateBucketInputParameter=\"true\" BucketNameParameter=\"defaulttrmbucket\""
+parameter_overrides = "ShouldCreateBucketInputParameter=\"true\" BucketNameParameter=\"trmappbucket\""
 
+[default.package.parameters]
+resolve_image_repos = true

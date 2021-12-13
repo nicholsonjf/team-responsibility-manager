@@ -1,79 +1,89 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: SAM Template for Team Responsibility Manager
-
 Metadata:
   AWS::ServerlessRepo::Application:
     Name: team-responsibility-manager
-    Description: TRM keeps track of shared responsibilities and notifies teams when a responsibility rotates from one person to the next.
+    Description: TRM keeps track of shared responsibilities and notifies teams when
+      a responsibility rotates from one person to the next.
     Author: nicholsonjf
     SpdxLicenseId: Apache-2.0
-    LicenseUrl: LICENSE.txt
-    ReadmeUrl: README.md
-    Labels: ['slack']
+    LicenseUrl: s3://aws-sam-cli-managed-default-samclisourcebucket-1f5zlr61r98x2/12d1aadad60a61c2a331f08611122876
+    ReadmeUrl: s3://aws-sam-cli-managed-default-samclisourcebucket-1f5zlr61r98x2/b8cf206de5950f702e6729024d211b50
+    Labels:
+    - slack
     HomePageUrl: https://github.com/nicholsonjf/team-responsibility-manager
     SemanticVersion: '0.1.1'
     SourceCodeUrl: https://github.com/nicholsonjf/team-responsibility-manager
-
 Globals:
   Function:
     Timeout: 3
-
 Parameters:
   ShouldCreateBucketInputParameter:
     Type: String
     Default: 'true'
     AllowedValues:
-      - 'true'
-      - 'false'
+    - 'true'
+    - 'false'
     ConstraintDescription: Allowed values are 'true' or 'false'.
     Description: Whether to create the S3 bucket used by this application.
   BucketNameParameter:
     Type: String
-    AllowedPattern: '^[a-z0-9]{3,63}$'
-    ConstraintDescription: Bucket name must be between 3-63 characters and contain only lowercase letters and numbers.
+    AllowedPattern: ^[a-z0-9]{3,63}$
+    ConstraintDescription: Bucket name must be between 3-63 characters and contain
+      only lowercase letters and numbers.
     Description: The name of S3 bucket used by this application.
-
 Conditions:
-  CreateS3Condition: !Equals [!Ref ShouldCreateBucketInputParameter, 'true']
-
+  CreateS3Condition:
+    Fn::Equals:
+    - Ref: ShouldCreateBucketInputParameter
+    - 'true'
 Resources:
   TRMBucket:
     Condition: CreateS3Condition
-    Type: 'AWS::S3::Bucket'
+    Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref BucketNameParameter
+      BucketName:
+        Ref: BucketNameParameter
   TRMFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       Timeout: 15
       MemorySize: 512
       PackageType: Image
       Architectures:
-        - x86_64
+      - x86_64
       Policies:
-        - S3CrudPolicy:
-            BucketName: !Ref BucketNameParameter
+      - S3CrudPolicy:
+          BucketName:
+            Ref: BucketNameParameter
       Environment:
         Variables:
-          BUCKET_NAME: !Ref BucketNameParameter
+          BUCKET_NAME:
+            Ref: BucketNameParameter
       Events:
         EventBridge:
           Type: Schedule
           Properties:
-            Schedule: 'cron(0/15 * * * ? *)'
+            Schedule: cron(0/15 * * * ? *)
             Name: TRMEventSchedule
             Description: Every 15 minutes
             Enabled: true
+      ImageUri: 825297539859.dkr.ecr.us-east-2.amazonaws.com/trmstackbf1d2e32/trmfunction9a692338repo:trmfunction-2aaed97ab0bb-python3.9-v1
     Metadata:
       Dockerfile: Dockerfile
       DockerContext: ./src
-      DockerTag: python3.9-v1  
-
+      DockerTag: python3.9-v1
 Outputs:
   TRMFunction:
-    Description: "TRM Lambda Function ARN"
-    Value: !GetAtt TRMFunction.Arn
+    Description: TRM Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - TRMFunction
+      - Arn
   TRMFunctionIamRole:
-    Description: "Implicit IAM Role created for the TRM function"
-    Value: !GetAtt TRMFunctionRole.Arn
+    Description: Implicit IAM Role created for the TRM function
+    Value:
+      Fn::GetAtt:
+      - TRMFunctionRole
+      - Arn
