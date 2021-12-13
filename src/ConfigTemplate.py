@@ -28,7 +28,8 @@ body = """
             "name": "Garbage Collector",
             "team": "my_team",
             "rotation": {
-                "frequency": "weekdaily",
+                "frequency": "weekly",
+                "day": "monday",
                 "hour": "8"
             },
             "slack_channel": "my_channel"
