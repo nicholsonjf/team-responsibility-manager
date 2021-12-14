@@ -12,13 +12,13 @@ This is a basic description of how to deploy the application. I recommend readin
 Login to the AWS console and switch to the "us-east-2" region.
 
 **Step 2:**  
-Go to [TRM's page][trm-sar-page] on the AWS Serverless Application Repository.
+Go to [the TRM page][trm-sar-page] on the AWS Serverless Application Repository.
 
 **Step 3:**  
-[Setup your Slack app](./#Slack)
+[Setup your Slack app](#Slack)
 
 **Step 4:**  
-[Fill in your config.json](./#Configuration)
+[Fill in your config.json](#Configuration)
 
 **Step 5:**  
 That's it! Wait for your configured responsibilities to rotate and look out for notifications in Slack.
