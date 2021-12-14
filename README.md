@@ -6,22 +6,19 @@ When you configure TRM you define a Responsibility, the Team that is responsible
 
 ## Quickstart
 
-This is a basic description of how to deploy the application. There's more detail on the deployment process further down in the readme.
+This is a basic description of how to deploy the application. I recommend reading more about the deployment process further down in the readme.
 
 **Step 1:**  
 Login to the AWS console and switch to the "us-east-2" region.
 
 **Step 2:**  
-Go to the app's page on the AWS Serverless Application Repository:
-https://serverlessrepo.aws.amazon.com/applications/us-east-2/825297539859/team-responsibility-manager
-
-Add a bucket name, and click "Deploy".
+Go to [TRM's page][trm-sar-page] on the AWS Serverless Application Repository.
 
 **Step 3:**  
-Setup your Slack app. See below for instructions.
+[Setup your Slack app](./#Slack)
 
 **Step 4:**  
-Fill in your config.json file. See below for instructions.
+[Fill in your config.json](./#Configuration)
 
 **Step 5:**  
 That's it! Wait for your configured responsibilities to rotate and look out for notifications in Slack.
@@ -43,21 +40,15 @@ Login to the AWS console and switch to the "us-east-2" region.
 
 (*Currently us-east-2 is the only region that's supported for this application's deployment. This is because container repositories on AWS ECR are only available from within a region. There may be a way around this but I'm not aware of how yet*)
 
-**Step 2:**    
-In the servies search box type in "Serverless Application Repository" and click on the first result.
+**Step 2:**  
+Go to [TRM's page][trm-sar-page] on the AWS Serverless Application Repository.
 
 **Step 3:**    
-Click on "Available Applications"
-
-**Step 4:**    
-Under "Public Applications" type in "Team Responsibility Manager" and click on the first result.
-
-**Step 5:**    
 Scroll down to "Application Settings" and enter a name for the S3 bucket that will be created during deployment. It needs to be globally unique, so choose a name with attributes specific to you. Example: "harvard-trm-bucket-54321"
 
 You can leave the other application settings as their defaults.
 
-**Step 6:**    
+**Step 4:**    
 Click "Deploy"
 
 ## Check The Deployment
@@ -88,6 +79,8 @@ In order for TRM to send notifications to the Slack channel you specify in your 
 
 **Step 1:**  
 Go to https://api.slack.com/apps and login to your Slack account. Once logged in, click the "Create New App" button.
+
+See the [Slack documenation for creating apps][slack-create-apps] if you need help.
 
 **Step 2:**  
 In the dialog that pops up, click on "From an app manifest". Select the workspace you want to receive notifications in.
@@ -126,10 +119,7 @@ If the "Activate Incoming Webhooks" switch isn't already enabled, enable it. The
 **Step 6:**  
 You should be redirected back to the "Webhooks" page. Find the webhook you just created and copy the Webhook-URL. This is what you'll enter in the "webhook" property of a slack channel you setup in your config.json.
 
-See the below Slack documentation if you need more help.
-
-https://slack.com/help/articles/115005265063-Incoming-webhooks-for-Slack
-https://api.slack.com/authentication/basics
+See the [Slack documentation for webhooks][slack-webhooks] if you need help.
 
 ## Configuration
 When you deploy TRM in AWS a file named `config.json` will be created in the the S3 bucket you specified during deployment. Download that file
@@ -264,3 +254,9 @@ https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/w
 It is essentially a Python application running inside a Docker container that is deployed to an AWS Lambda function. During deployment, AWS references values specified in the Amazon SAM template to create the other resources needed by the application (see "Resources Created on AWS During Deployment" above).
 
 I go into more detail about how the application was created and how it's used in the videos linked in the first section.
+
+[trm-sar-page]: https://serverlessrepo.aws.amazon.com/applications/us-east-2/825297539859/team-responsibility-manager
+
+[slack-webhooks]: https://slack.com/help/articles/115005265063-Incoming-webhooks-for-Slack
+
+[slack-create-apps]: https://api.slack.com/authentication/basics
