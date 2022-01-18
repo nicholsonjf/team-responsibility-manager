@@ -4,7 +4,7 @@ TRM keeps track of shared responsibilities and notifies teams when a responsibil
 
 When you configure TRM you define a Responsibility, the Team that is responsible for it, and the People that are members of that Team. You also define when that Responsibility rotates from one Person to the next. When a Responsibility rotates, the next Person is notified in the Team's Slack channel.
 
-<img width="676" alt="Screen Shot 2022-01-10 at 6 52 14 AM" src="https://user-images.githubusercontent.com/4286084/148786063-2b335fde-88b0-4ba4-9efd-2f88a86b52b5.png">
+<img alt="A flow chart of the application" src="assets/images/trm-flow.png">
 
 ## Quickstart
 
